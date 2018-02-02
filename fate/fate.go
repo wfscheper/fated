@@ -20,81 +20,92 @@ import (
 	"strings"
 )
 
-type FateRoll rune
+// Roll is a single roll of a fate dice.
+type Roll rune
 
 const (
-	PLUS  FateRoll = '+'
-	MINUS FateRoll = '-'
-	ZERO  FateRoll = 'o'
-	NULL  FateRoll = 'x'
+	// Plus is a + roll
+	Plus Roll = '+'
+	// Minus is a - roll
+	Minus Roll = '-'
+	// Zero is a o roll
+	Zero Roll = 'o'
+	// Unknown is a roll that we shouldn't get
+	Unknown Roll = 'x'
 )
 
 const (
-	CARD_TOP            string = "+-----------+"
-	CARD_BOTTOM         string = "+-----------+"
-	TOP_MARKER          string = "| %c         |"
-	TOP_VALUE_MARKER    string = "| %c      %+d |"
-	BOTTOM_MARKER       string = "|         %c |"
-	BOTTOM_VALUE_MARKER string = "| %+d      %c |"
+	cardTop           string = "+-----------+"
+	cardBottom        string = "+-----------+"
+	topMarker         string = "| %c         |"
+	topValueMarker    string = "| %c      %+d |"
+	bottomMarker      string = "|         %c |"
+	bottomValueMarker string = "| %+d      %c |"
 )
 
-type RenderFunc func([]FateRoll) string
+// RenderFunc is type of function that takes a slice of Rolls and converts them
+// into a string for printing.
+type RenderFunc func([]Roll) string
 
-func RenderCard(rolls []FateRoll) string {
-	var value int = SumRolls(rolls)
-	var rv []string = []string{
-		CARD_TOP,
-		fmt.Sprintf(TOP_VALUE_MARKER, rolls[0], value),
-		fmt.Sprintf(TOP_MARKER, rolls[1]),
-		fmt.Sprintf(TOP_MARKER, rolls[2]),
-		fmt.Sprintf(TOP_MARKER, rolls[3]),
-		fmt.Sprintf(BOTTOM_MARKER, rolls[3]),
-		fmt.Sprintf(BOTTOM_MARKER, rolls[2]),
-		fmt.Sprintf(BOTTOM_MARKER, rolls[1]),
-		fmt.Sprintf(BOTTOM_VALUE_MARKER, value, rolls[0]),
-		CARD_BOTTOM,
+// RenderCard takes a slice of rolls and returns a string representation of a Fate card.
+func RenderCard(rolls []Roll) string {
+	var value = SumRolls(rolls)
+	var rv = []string{
+		cardTop,
+		fmt.Sprintf(topValueMarker, rolls[0], value),
+		fmt.Sprintf(topMarker, rolls[1]),
+		fmt.Sprintf(topMarker, rolls[2]),
+		fmt.Sprintf(topMarker, rolls[3]),
+		fmt.Sprintf(bottomMarker, rolls[3]),
+		fmt.Sprintf(bottomMarker, rolls[2]),
+		fmt.Sprintf(bottomMarker, rolls[1]),
+		fmt.Sprintf(bottomValueMarker, value, rolls[0]),
+		cardBottom,
 	}
 	return strings.Join(rv, "\n")
 }
 
-func RenderDice(rolls []FateRoll) string {
-	var value int = SumRolls(rolls)
+// RenderDice takes a slice of Rolls and returns a string representation of an
+// equivalent number of Fate dice.
+func RenderDice(rolls []Roll) string {
+	var value = SumRolls(rolls)
 	return fmt.Sprintf("%+d: %c %c %c %c", value, rolls[0], rolls[1], rolls[2], rolls[3])
 }
 
-func RollDice(count int) []FateRoll {
-	rv := make([]FateRoll, count)
-	for i, _ := range rv {
+// RollDice returns a slice of count Rolls.
+func RollDice(count int) []Roll {
+	rv := make([]Roll, count)
+	for i := range rv {
 		rv[i] = RollDie()
 	}
 	return rv
 }
 
-// RolDie returns a fate dice roll: -, +, or o
-func RollDie() FateRoll {
+// RollDie returns a Roll: -, +, or o
+func RollDie() Roll {
 	V, _ := rand.Int(rand.Reader, big.NewInt(6))
 	v := V.Int64()
 	switch {
 	case v < 2:
-		return MINUS
+		return Minus
 	case v < 4:
-		return ZERO
+		return Zero
 	case v < 6:
-		return PLUS
+		return Plus
 	default:
-		return NULL
+		return Unknown
 	}
 }
 
-// SumRolls returns the value of a list of fate rolls
-func SumRolls(rolls []FateRoll) int {
+// SumRolls returns the value of a slice of Rolls
+func SumRolls(rolls []Roll) int {
 	var value int
 	for _, roll := range rolls {
 		switch roll {
-		case MINUS:
-			value += -1
-		case PLUS:
-			value += 1
+		case Minus:
+			value = value - 1
+		case Plus:
+			value = value + 1
 		}
 	}
 	return value

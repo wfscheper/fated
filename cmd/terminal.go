@@ -12,11 +12,11 @@ import (
 )
 
 func emitStr(s tcell.Screen, x, y int, style tcell.Style, str string) {
-	var orig_x int = x
+	var origX = x
 	for _, c := range str {
 		switch c {
 		case '\n':
-			x = orig_x
+			x = origX
 			y++
 		default:
 			var comb []rune
