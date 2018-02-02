@@ -16,21 +16,27 @@ Running it then should be as simple as:
 
 ```console
 $ make
-$ bin/{{cookiecutter.app_name}}
+$ bin/fated
 ```
 
 ## Running fated
 
-To draw a single Fate card:
+To draw a single Fate card::
 
-    fated draw
+```console
+$ bin/fated draw
+```
 
-To roll dice instead:
+To roll dice instead::
 
-    fated roll
+```console
+$ fated roll
+```
 
 If you expect to draw or roll multiple times and want a cleaner interface, use
-the `-f, --foregroun` option:
+the `-f, --foregroun` option::
 
-    fated draw --foreground
-    fated roll --foreground
+```console
+$ fated draw --foreground
+$ fated roll --foreground
+```
