@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var debug bool
 var foreground bool
 
 // RootCmd represents the base command when called without any subcommands
@@ -45,6 +46,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+	RootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Run in debug mode")
 	RootCmd.PersistentFlags().BoolVarP(&foreground, "foreground", "f", false, "Run in the foreground")
 
 	// Cobra also supports local flags, which will only run

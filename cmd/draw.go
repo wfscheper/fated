@@ -14,9 +14,7 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/wfscheper/fated/fate"
@@ -28,18 +26,12 @@ var drawCmd = &cobra.Command{
 	Short: "Draw a fate card",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if foreground {
-			fmt.Println("Press enter to draw")
-			for {
-				reader := bufio.NewReader(os.Stdin)
-				reader.ReadString('\n')
-				rolls := fate.RollDice(4)
-				fmt.Println(fate.RenderCard(rolls))
-			}
-		} else {
+		if !foreground {
 			rolls := fate.RollDice(4)
 			fmt.Println(fate.RenderCard(rolls))
+			return
 		}
+		fatedTerminal(fate.RenderCard)
 	},
 }
 

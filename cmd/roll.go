@@ -17,6 +17,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/wfscheper/fated/fate"
 )
 
 // rollCmd represents the roll command
@@ -25,7 +26,12 @@ var rollCmd = &cobra.Command{
 	Short: "Roll a set of fate dice",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("roll called")
+		if !foreground {
+			rolls := fate.RollDice(4)
+			fmt.Println(fate.RenderDice(rolls))
+			return
+		}
+		fatedTerminal(fate.RenderDice)
 	},
 }
 

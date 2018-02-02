@@ -38,6 +38,8 @@ const (
 	BOTTOM_VALUE_MARKER string = "| %+d      %c |"
 )
 
+type RenderFunc func([]FateRoll) string
+
 func RenderCard(rolls []FateRoll) string {
 	var value int = SumRolls(rolls)
 	var rv []string = []string{
@@ -53,6 +55,11 @@ func RenderCard(rolls []FateRoll) string {
 		CARD_BOTTOM,
 	}
 	return strings.Join(rv, "\n")
+}
+
+func RenderDice(rolls []FateRoll) string {
+	var value int = SumRolls(rolls)
+	return fmt.Sprintf("%+d: %c %c %c %c", value, rolls[0], rolls[1], rolls[2], rolls[3])
 }
 
 func RollDice(count int) []FateRoll {
