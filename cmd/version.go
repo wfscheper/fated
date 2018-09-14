@@ -2,7 +2,9 @@ package cmd
 
 var (
 	// Version of fated. The value is filled in at build time
-	Version = "unkown"
-	// BuildDate of fated. Teh value is filled in at build time.
-	BuildDate = "unkown"
+	Version = "unknown"
+	// BuildDate of fated. The value is filled in at build time.
+	BuildDate = "unknown"
+	// Commit that was built. The value is filled in at build time.
+	Commit = "unknown"
 )
