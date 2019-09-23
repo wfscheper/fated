@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
@@ -64,9 +65,9 @@ func fatedTerminal(f fate.RenderFunc) {
 	}()
 
 	// register signals to channel
-	sigChan := make(chan os.Signal)
+	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
-	signal.Notify(sigChan, os.Kill)
+	signal.Notify(sigChan, syscall.SIGTERM)
 
 	var renderFate = func() {
 		rolls := fate.RollDice(4)
